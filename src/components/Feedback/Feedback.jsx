@@ -1,4 +1,9 @@
-export default function Feedback({ feedbackData, totalFeedback }) {
+import { PiPercentThin } from "react-icons/pi";
+export default function Feedback({
+  feedbackData,
+  totalFeedback,
+  positiveFeedback,
+}) {
   return (
     <div>
       <ul>
@@ -6,6 +11,10 @@ export default function Feedback({ feedbackData, totalFeedback }) {
         <li>Neutral: {feedbackData.neutral}</li>
         <li>Bad: {feedbackData.bad}</li>
         <li>Total: {totalFeedback}</li>
+        <li>
+          Positive: {positiveFeedback}
+          <PiPercentThin />
+        </li>
       </ul>
     </div>
   );

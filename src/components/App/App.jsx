@@ -2,17 +2,26 @@ import Feedback from "../Feedback/Feedback";
 import Description from "../Description/Description";
 import Options from "../Options/Options";
 import Notification from "../Notification/Notification";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function App() {
-  const [feedbackData, setFeedbackData] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [feedbackData, setFeedbackData] = useState(() => {
+    const saveFeedbackData = JSON.parse(localStorage.getItem("key-feedback"));
+    if (saveFeedbackData != null) {
+      return saveFeedbackData;
+    }
+    return { good: 0, neutral: 0, bad: 0 };
   });
+
+  useEffect(() => {
+    localStorage.setItem("key-feedback", JSON.stringify(feedbackData));
+  }, [feedbackData]);
 
   const totalFeedback =
     feedbackData.good + feedbackData.neutral + feedbackData.bad;
+  const positiveFeedback = Math.round(
+    (feedbackData.good / totalFeedback) * 100
+  );
 
   function updateFeedback(feedbackType) {
     setFeedbackData((prev) => ({
@@ -34,7 +43,11 @@ export default function App() {
         totalFeedback={totalFeedback}
       />
       {totalFeedback > 0 ? (
-        <Feedback feedbackData={feedbackData} totalFeedback={totalFeedback} />
+        <Feedback
+          feedbackData={feedbackData}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
       ) : (
         <Notification />
       )}
